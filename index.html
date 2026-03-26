@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciador de Dispositivos</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600&display=swap"
         rel="stylesheet">
@@ -45,7 +44,6 @@
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            padding: 0;
         }
 
         header {
@@ -86,19 +84,28 @@
             font-family: var(--mono);
             padding: 4px 10px;
             border-radius: 20px;
-            background: var(--green-dim);
-            color: var(--green);
-            border: 1px solid rgba(52, 211, 153, 0.25);
+            background: var(--red-dim);
+            color: var(--red);
+            border: 1px solid rgba(248, 113, 113, 0.25);
             display: flex;
             align-items: center;
             gap: 6px;
+        }
+
+        .status-badge.online {
+            background: var(--green-dim);
+            color: var(--green);
+            border-color: rgba(52, 211, 153, 0.25);
         }
 
         .status-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--green);
+            background: currentColor;
+        }
+
+        .status-badge.online .status-dot {
             animation: pulse 2s infinite;
         }
 
@@ -106,23 +113,12 @@
 
             0%,
             100% {
-                opacity: 1;
+                opacity: 1
             }
 
             50% {
-                opacity: 0.4;
+                opacity: .4
             }
-        }
-
-        .status-badge.offline {
-            background: var(--red-dim);
-            color: var(--red);
-            border-color: rgba(248, 113, 113, 0.25);
-        }
-
-        .status-badge.offline .status-dot {
-            background: var(--red);
-            animation: none;
         }
 
         main {
@@ -140,7 +136,7 @@
         }
 
         #config-panel h2 {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             color: var(--muted);
             text-transform: uppercase;
@@ -235,6 +231,11 @@
             background: rgba(248, 113, 113, 0.2);
         }
 
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+
         .section-header {
             display: flex;
             align-items: center;
@@ -322,12 +323,12 @@
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(6px);
+                transform: translateY(6px)
             }
 
             to {
                 opacity: 1;
-                transform: none;
+                transform: none
             }
         }
 
@@ -368,15 +369,12 @@
         .device-name {
             font-size: 15px;
             font-weight: 600;
-            margin-bottom: 3px;
+            margin: 8px 0 3px;
         }
 
         .device-location {
             font-size: 12px;
             color: var(--muted);
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
 
         .card-actions {
@@ -416,34 +414,20 @@
             gap: 8px;
         }
 
-        .copy-btn {
+        .copy-btn,
+        .eye-btn {
             background: none;
             border: none;
             color: var(--muted);
             cursor: pointer;
             padding: 2px 6px;
-            font-size: 12px;
+            font-size: 13px;
             border-radius: 4px;
             transition: color 0.1s;
         }
 
         .copy-btn:hover {
             color: var(--accent);
-        }
-
-        .password-dots {
-            letter-spacing: 2px;
-        }
-
-        .eye-btn {
-            background: none;
-            border: none;
-            color: var(--muted);
-            cursor: pointer;
-            padding: 2px 4px;
-            font-size: 13px;
-            border-radius: 4px;
-            transition: color 0.1s;
         }
 
         .eye-btn:hover {
@@ -478,12 +462,12 @@
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(16px);
+                transform: translateY(16px)
             }
 
             to {
                 opacity: 1;
-                transform: none;
+                transform: none
             }
         }
 
@@ -540,7 +524,6 @@
             padding: 12px 18px;
             font-size: 13px;
             font-family: var(--mono);
-            color: var(--green);
             z-index: 999;
             opacity: 0;
             transform: translateY(10px);
@@ -574,25 +557,25 @@
 
         @keyframes spin {
             to {
-                transform: rotate(360deg);
+                transform: rotate(360deg)
             }
         }
 
-        @media (max-width: 640px) {
+        @media(max-width:640px) {
             main {
-                padding: 1rem;
+                padding: 1rem
             }
 
             .config-row {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr
             }
 
             .devices-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr
             }
 
             .form-row {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr
             }
         }
     </style>
@@ -605,16 +588,15 @@
             <div class="logo-icon">🔐</div>
             Gerenciador de Dispositivos
         </div>
-        <div id="conn-status" class="status-badge offline">
+        <div id="conn-status" class="status-badge">
             <div class="status-dot"></div>
-            <span>Desconectado</span>
+            <span id="conn-label">Desconectado</span>
         </div>
     </header>
 
     <main>
-        <!-- Configuração do Supabase -->
         <div id="config-panel">
-            <h2>⚙ Configuração do Supabase</h2>
+            <h2>Configuração do Supabase</h2>
             <div class="config-row">
                 <div>
                     <label>SUPABASE URL</label>
@@ -624,46 +606,42 @@
                     <label>ANON KEY</label>
                     <input type="password" id="sb-key" placeholder="eyJhbGci...">
                 </div>
-                <button class="btn-primary" onclick="conectar()">Conectar</button>
+                <button class="btn-primary" id="btn-conectar">Conectar</button>
             </div>
         </div>
 
-        <!-- Conteúdo principal (oculto até conectar) -->
         <div id="main-content" style="display:none">
             <div class="section-header">
                 <div style="display:flex;align-items:center">
                     <span class="section-title">Dispositivos</span>
                     <span class="count-badge" id="count-badge">0</span>
                 </div>
-                <button class="btn-primary" onclick="abrirModal()">+ Novo Dispositivo</button>
+                <button class="btn-primary" id="btn-novo">+ Novo Dispositivo</button>
             </div>
-
             <div class="filters">
                 <div class="search-box">
                     <span class="search-icon">🔍</span>
-                    <input type="text" id="search" placeholder="Buscar por nome ou local..." oninput="filtrar()">
+                    <input type="text" id="search" placeholder="Buscar por nome ou local...">
                 </div>
-                <button class="filter-btn active" onclick="setFiltro('todos', this)">Todos</button>
-                <button class="filter-btn" onclick="setFiltro('DVR', this)">DVR</button>
-                <button class="filter-btn" onclick="setFiltro('Leitor Facial', this)">Leitor Facial</button>
+                <button class="filter-btn active" data-filtro="todos">Todos</button>
+                <button class="filter-btn" data-filtro="DVR">DVR</button>
+                <button class="filter-btn" data-filtro="Leitor Facial">Leitor Facial</button>
             </div>
-
             <div id="devices-container">
                 <div class="loading">
-                    <div class="spinner"></div> Carregando dispositivos...
+                    <div class="spinner"></div> Carregando...
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Modal de criação/edição -->
     <div class="modal-overlay" id="modal">
         <div class="modal">
             <div class="modal-title" id="modal-title">Novo Dispositivo</div>
             <input type="hidden" id="edit-id">
             <div class="form-row">
                 <div class="form-group">
-                    <label>Tipo de Dispositivo</label>
+                    <label>Tipo</label>
                     <select id="f-tipo">
                         <option value="DVR">DVR</option>
                         <option value="Leitor Facial">Leitor Facial</option>
@@ -691,8 +669,8 @@
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn-ghost" onclick="fecharModal()">Cancelar</button>
-                <button class="btn-primary" id="btn-salvar" onclick="salvar()">Salvar</button>
+                <button class="btn-ghost" id="btn-cancelar">Cancelar</button>
+                <button class="btn-primary" id="btn-salvar">Salvar</button>
             </div>
         </div>
     </div>
@@ -700,218 +678,223 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        let supabase = null;
-        let dispositivos = [];
-        let filtroAtual = 'todos';
-        let visiblePasswords = {};
-
-        function conectar() {
-            const url = document.getElementById('sb-url').value.trim();
-            const key = document.getElementById('sb-key').value.trim();
-            if (!url || !key) return showToast('Preencha URL e Anon Key!', 'error');
-            if (!window.supabase || !window.supabase.createClient) {
-                showToast('Supabase nao carregou. Verifique sua internet.', 'error');
-                return;
-            }
-            supabase = window.supabase.createClient(url, key);
-            carregarDispositivos();
-        }
-
-        async function carregarDispositivos() {
-            const { data, error } = await supabase
-                .from('dispositivos')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                showToast('Erro ao conectar. Verifique as credenciais.', 'error');
-                document.getElementById('conn-status').className = 'status-badge offline';
-                document.getElementById('conn-status').innerHTML = '<div class="status-dot"></div><span>Erro</span>';
-                return;
-            }
-
-            document.getElementById('conn-status').className = 'status-badge';
-            document.getElementById('conn-status').innerHTML = '<div class="status-dot"></div><span>Conectado</span>';
-            document.getElementById('main-content').style.display = 'block';
-            document.getElementById('config-panel').style.marginBottom = '2rem';
-
-            dispositivos = data || [];
-            renderizar();
-        }
-
-        function filtrar() {
-            renderizar();
-        }
-
-        function setFiltro(tipo, btn) {
-            filtroAtual = tipo;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderizar();
-        }
-
-        function renderizar() {
-            const busca = document.getElementById('search').value.toLowerCase();
-            const filtrados = dispositivos.filter(d => {
-                const matchTipo = filtroAtual === 'todos' || d.tipo === filtroAtual;
-                const matchBusca = !busca ||
-                    d.nome.toLowerCase().includes(busca) ||
-                    (d.localizacao || '').toLowerCase().includes(busca) ||
-                    (d.ip || '').includes(busca);
-                return matchTipo && matchBusca;
-            });
-
-            document.getElementById('count-badge').textContent = filtrados.length;
-            const container = document.getElementById('devices-container');
-
-            if (!filtrados.length) {
-                container.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Nenhum dispositivo encontrado.</p></div>`;
-                return;
-            }
-
-            container.innerHTML = `<div class="devices-grid">${filtrados.map(d => cardHTML(d)).join('')}</div>`;
-        }
-
-        function cardHTML(d) {
-            const senha = visiblePasswords[d.id] ? d.senha : '<span class="password-dots">••••••••</span>';
-            const eyeLabel = visiblePasswords[d.id] ? '🙈' : '👁';
-            const badgeClass = d.tipo === 'DVR' ? 'type-dvr' : 'type-facial';
-
-            return `
-  <div class="device-card" id="card-${d.id}">
-    <div class="card-header">
-      <div>
-        <span class="device-type-badge ${badgeClass}">${d.tipo}</span>
-        <div class="device-name" style="margin-top:8px">${d.nome}</div>
-        <div class="device-location">📍 ${d.localizacao || '—'}</div>
-      </div>
-      <div class="card-actions">
-        <button class="btn-ghost" style="padding:6px 10px;font-size:12px" onclick="editarDispositivo('${d.id}')">✏</button>
-        <button class="btn-danger" onclick="excluir('${d.id}')">🗑</button>
-      </div>
-    </div>
-    <div class="info-grid">
-      <div class="info-row">
-        <span class="info-label">IP</span>
-        <span class="info-value">
-          ${d.ip || '—'}
-          ${d.ip ? `<button class="copy-btn" onclick="copiar('${d.ip}')">⎘</button>` : ''}
-        </span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">Usuário</span>
-        <span class="info-value">
-          ${d.usuario || '—'}
-          ${d.usuario ? `<button class="copy-btn" onclick="copiar('${d.usuario}')">⎘</button>` : ''}
-        </span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">Senha</span>
-        <span class="info-value" id="senha-${d.id}">
-          ${senha}
-          <button class="eye-btn" onclick="toggleSenha('${d.id}', '${(d.senha || '').replace(/'/g, "\\'")}')"> ${eyeLabel}</button>
-          ${d.senha ? `<button class="copy-btn" onclick="copiar('${(d.senha || '').replace(/'/g, "\\'")}')">⎘</button>` : ''}
-        </span>
-      </div>
-    </div>
-  </div>`;
-        }
-
-        function toggleSenha(id, senha) {
-            visiblePasswords[id] = !visiblePasswords[id];
-            const el = document.getElementById(`senha-${id}`);
-            const eyeLabel = visiblePasswords[id] ? '🙈' : '👁';
-            const shown = visiblePasswords[id] ? senha : '<span class="password-dots">••••••••</span>';
-            el.innerHTML = `${shown}<button class="eye-btn" onclick="toggleSenha('${id}', '${senha.replace(/'/g, "\\'")}')"> ${eyeLabel}</button><button class="copy-btn" onclick="copiar('${senha.replace(/'/g, "\\'")}')">⎘</button>`;
-        }
-
-        function copiar(texto) {
-            navigator.clipboard.writeText(texto).then(() => showToast('Copiado!'));
-        }
-
-        function abrirModal(id) {
-            document.getElementById('edit-id').value = '';
-            document.getElementById('f-tipo').value = 'DVR';
-            document.getElementById('f-nome').value = '';
-            document.getElementById('f-local').value = '';
-            document.getElementById('f-ip').value = '';
-            document.getElementById('f-usuario').value = '';
-            document.getElementById('f-senha').value = '';
-            document.getElementById('modal-title').textContent = 'Novo Dispositivo';
-            document.getElementById('btn-salvar').textContent = 'Salvar';
-            document.getElementById('modal').classList.add('open');
-        }
-
-        function editarDispositivo(id) {
-            const d = dispositivos.find(x => x.id == id);
-            if (!d) return;
-            document.getElementById('edit-id').value = d.id;
-            document.getElementById('f-tipo').value = d.tipo;
-            document.getElementById('f-nome').value = d.nome;
-            document.getElementById('f-local').value = d.localizacao || '';
-            document.getElementById('f-ip').value = d.ip || '';
-            document.getElementById('f-usuario').value = d.usuario || '';
-            document.getElementById('f-senha').value = d.senha || '';
-            document.getElementById('modal-title').textContent = 'Editar Dispositivo';
-            document.getElementById('btn-salvar').textContent = 'Atualizar';
-            document.getElementById('modal').classList.add('open');
-        }
-
-        function fecharModal() {
-            document.getElementById('modal').classList.remove('open');
-        }
-
-        async function salvar() {
-            const id = document.getElementById('edit-id').value;
-            const dados = {
-                tipo: document.getElementById('f-tipo').value,
-                nome: document.getElementById('f-nome').value.trim(),
-                localizacao: document.getElementById('f-local').value.trim(),
-                ip: document.getElementById('f-ip').value.trim(),
-                usuario: document.getElementById('f-usuario').value.trim(),
-                senha: document.getElementById('f-senha').value.trim(),
+        (function () {
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+            script.onload = init;
+            script.onerror = function () {
+                showToast('Falha ao carregar Supabase. Verifique sua internet.', 'error');
             };
+            document.head.appendChild(script);
 
-            if (!dados.nome) return showToast('Nome obrigatório!', 'error');
+            var client = null;
+            var dispositivos = [];
+            var filtroAtual = 'todos';
+            var senhasVisiveis = {};
 
-            const btn = document.getElementById('btn-salvar');
-            btn.disabled = true;
-
-            let error;
-            if (id) {
-                ({ error } = await supabase.from('dispositivos').update(dados).eq('id', id));
-            } else {
-                ({ error } = await supabase.from('dispositivos').insert([dados]));
+            function init() {
+                document.getElementById('btn-conectar').addEventListener('click', conectar);
+                document.getElementById('btn-novo').addEventListener('click', function () { abrirModal(); });
+                document.getElementById('btn-cancelar').addEventListener('click', fecharModal);
+                document.getElementById('btn-salvar').addEventListener('click', salvar);
+                document.getElementById('search').addEventListener('input', renderizar);
+                document.getElementById('modal').addEventListener('click', function (e) { if (e.target === this) fecharModal(); });
+                document.querySelectorAll('.filter-btn').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        filtroAtual = this.dataset.filtro;
+                        document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+                        this.classList.add('active');
+                        renderizar();
+                    });
+                });
             }
 
-            btn.disabled = false;
+            function conectar() {
+                var url = document.getElementById('sb-url').value.trim();
+                var key = document.getElementById('sb-key').value.trim();
+                if (!url || !key) return showToast('Preencha URL e Anon Key!', 'error');
+                client = window.supabase.createClient(url, key);
+                carregarDispositivos();
+            }
 
-            if (error) return showToast('Erro ao salvar: ' + error.message, 'error');
+            async function carregarDispositivos() {
+                var btn = document.getElementById('btn-conectar');
+                btn.disabled = true;
+                btn.textContent = 'Conectando...';
 
-            showToast(id ? 'Dispositivo atualizado!' : 'Dispositivo adicionado!');
-            fecharModal();
-            carregarDispositivos();
-        }
+                var result = await client.from('dispositivos').select('*').order('created_at', { ascending: false });
 
-        async function excluir(id) {
-            if (!confirm('Confirmar exclusão do dispositivo?')) return;
-            const { error } = await supabase.from('dispositivos').delete().eq('id', id);
-            if (error) return showToast('Erro ao excluir', 'error');
-            showToast('Dispositivo removido!');
-            carregarDispositivos();
-        }
+                btn.disabled = false;
+                btn.textContent = 'Conectar';
 
-        function showToast(msg, tipo) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.style.color = tipo === 'error' ? 'var(--red)' : 'var(--green)';
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2500);
-        }
+                if (result.error) {
+                    showToast('Erro: ' + result.error.message, 'error');
+                    setStatus(false);
+                    return;
+                }
 
-        document.getElementById('modal').addEventListener('click', function (e) {
-            if (e.target === this) fecharModal();
-        });
+                setStatus(true);
+                document.getElementById('main-content').style.display = 'block';
+                dispositivos = result.data || [];
+                renderizar();
+            }
+
+            function setStatus(online) {
+                var el = document.getElementById('conn-status');
+                var label = document.getElementById('conn-label');
+                el.className = 'status-badge' + (online ? ' online' : '');
+                label.textContent = online ? 'Conectado' : 'Desconectado';
+            }
+
+            function renderizar() {
+                var busca = document.getElementById('search').value.toLowerCase();
+                var filtrados = dispositivos.filter(function (d) {
+                    var matchTipo = filtroAtual === 'todos' || d.tipo === filtroAtual;
+                    var matchBusca = !busca ||
+                        (d.nome || '').toLowerCase().includes(busca) ||
+                        (d.localizacao || '').toLowerCase().includes(busca) ||
+                        (d.ip || '').includes(busca);
+                    return matchTipo && matchBusca;
+                });
+
+                document.getElementById('count-badge').textContent = filtrados.length;
+                var container = document.getElementById('devices-container');
+
+                if (!filtrados.length) {
+                    container.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Nenhum dispositivo encontrado.</p></div>';
+                    return;
+                }
+
+                container.innerHTML = '<div class="devices-grid">' + filtrados.map(cardHTML).join('') + '</div>';
+
+                container.querySelectorAll('[data-action]').forEach(function (el) {
+                    el.addEventListener('click', function () {
+                        var action = this.dataset.action;
+                        var id = this.dataset.id;
+                        var val = this.dataset.val;
+                        if (action === 'editar') editarDispositivo(id);
+                        if (action === 'excluir') excluir(id);
+                        if (action === 'copiar') copiar(val);
+                        if (action === 'toggle-senha') toggleSenha(id);
+                    });
+                });
+            }
+
+            function cardHTML(d) {
+                var visivel = senhasVisiveis[d.id];
+                var senhaTexto = visivel ? (d.senha || '—') : '••••••••';
+                var badgeClass = d.tipo === 'DVR' ? 'type-dvr' : 'type-facial';
+                return '<div class="device-card">' +
+                    '<div class="card-header">' +
+                    '<div>' +
+                    '<span class="device-type-badge ' + badgeClass + '">' + d.tipo + '</span>' +
+                    '<div class="device-name">' + (d.nome || '') + '</div>' +
+                    '<div class="device-location">📍 ' + (d.localizacao || '—') + '</div>' +
+                    '</div>' +
+                    '<div class="card-actions">' +
+                    '<button class="btn-ghost btn-sm" data-action="editar" data-id="' + d.id + '">✏</button>' +
+                    '<button class="btn-danger" data-action="excluir" data-id="' + d.id + '">🗑</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="info-grid">' +
+                    infoRow('IP', d.ip, d.ip) +
+                    infoRow('Usuário', d.usuario, d.usuario) +
+                    '<div class="info-row">' +
+                    '<span class="info-label">Senha</span>' +
+                    '<span class="info-value">' +
+                    '<span id="senha-txt-' + d.id + '">' + senhaTexto + '</span>' +
+                    '<button class="eye-btn" data-action="toggle-senha" data-id="' + d.id + '">' + (visivel ? '🙈' : '👁') + '</button>' +
+                    (d.senha ? '<button class="copy-btn" data-action="copiar" data-val="' + escAttr(d.senha) + '">⎘</button>' : '') +
+                    '</span>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+            }
+
+            function infoRow(label, valor, copyVal) {
+                return '<div class="info-row">' +
+                    '<span class="info-label">' + label + '</span>' +
+                    '<span class="info-value">' +
+                    (valor || '—') +
+                    (copyVal ? '<button class="copy-btn" data-action="copiar" data-val="' + escAttr(copyVal) + '">⎘</button>' : '') +
+                    '</span>' +
+                    '</div>';
+            }
+
+            function escAttr(s) { return (s || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
+            function toggleSenha(id) {
+                senhasVisiveis[id] = !senhasVisiveis[id];
+                var d = dispositivos.find(function (x) { return x.id == id; });
+                var el = document.getElementById('senha-txt-' + id);
+                if (el && d) el.textContent = senhasVisiveis[id] ? (d.senha || '—') : '••••••••';
+                var btn = document.querySelector('[data-action="toggle-senha"][data-id="' + id + '"]');
+                if (btn) btn.textContent = senhasVisiveis[id] ? '🙈' : '👁';
+            }
+
+            function copiar(texto) {
+                navigator.clipboard.writeText(texto).then(function () { showToast('Copiado!'); });
+            }
+
+            function abrirModal(d) {
+                document.getElementById('edit-id').value = d ? d.id : '';
+                document.getElementById('f-tipo').value = d ? d.tipo : 'DVR';
+                document.getElementById('f-nome').value = d ? d.nome : '';
+                document.getElementById('f-local').value = d ? (d.localizacao || '') : '';
+                document.getElementById('f-ip').value = d ? (d.ip || '') : '';
+                document.getElementById('f-usuario').value = d ? (d.usuario || '') : '';
+                document.getElementById('f-senha').value = d ? (d.senha || '') : '';
+                document.getElementById('modal-title').textContent = d ? 'Editar Dispositivo' : 'Novo Dispositivo';
+                document.getElementById('btn-salvar').textContent = d ? 'Atualizar' : 'Salvar';
+                document.getElementById('modal').classList.add('open');
+            }
+
+            function fecharModal() { document.getElementById('modal').classList.remove('open'); }
+
+            function editarDispositivo(id) {
+                var d = dispositivos.find(function (x) { return x.id == id; });
+                if (d) abrirModal(d);
+            }
+
+            async function salvar() {
+                var id = document.getElementById('edit-id').value;
+                var dados = {
+                    tipo: document.getElementById('f-tipo').value,
+                    nome: document.getElementById('f-nome').value.trim(),
+                    localizacao: document.getElementById('f-local').value.trim(),
+                    ip: document.getElementById('f-ip').value.trim(),
+                    usuario: document.getElementById('f-usuario').value.trim(),
+                    senha: document.getElementById('f-senha').value.trim(),
+                };
+                if (!dados.nome) return showToast('Nome obrigatório!', 'error');
+                var btn = document.getElementById('btn-salvar');
+                btn.disabled = true;
+                var result = id
+                    ? await client.from('dispositivos').update(dados).eq('id', id)
+                    : await client.from('dispositivos').insert([dados]);
+                btn.disabled = false;
+                if (result.error) return showToast('Erro: ' + result.error.message, 'error');
+                showToast(id ? 'Atualizado!' : 'Dispositivo adicionado!');
+                fecharModal();
+                carregarDispositivos();
+            }
+
+            async function excluir(id) {
+                if (!confirm('Confirmar exclusão?')) return;
+                var result = await client.from('dispositivos').delete().eq('id', id);
+                if (result.error) return showToast('Erro ao excluir', 'error');
+                showToast('Removido!');
+                carregarDispositivos();
+            }
+
+            function showToast(msg, tipo) {
+                var t = document.getElementById('toast');
+                t.textContent = msg;
+                t.style.color = tipo === 'error' ? 'var(--red)' : 'var(--green)';
+                t.classList.add('show');
+                setTimeout(function () { t.classList.remove('show'); }, 2500);
+            }
+        })();
     </script>
 </body>
 
