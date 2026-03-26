@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Dispositivos</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0f1117;
+            --surface: #181c27;
+            --surface2: #1e2334;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.16);
+            --text: #e8eaf0;
+            --muted: #7a8099;
+            --accent: #4f8ef7;
+            --accent-dim: rgba(79, 142, 247, 0.12);
+            --accent-border: rgba(79, 142, 247, 0.35);
+            --green: #34d399;
+            --green-dim: rgba(52, 211, 153, 0.1);
+            --amber: #fbbf24;
+            --amber-dim: rgba(251, 191, 36, 0.1);
+            --red: #f87171;
+            --red-dim: rgba(248, 113, 113, 0.1);
+            --radius: 10px;
+            --font: 'Sora', sans-serif;
+            --mono: 'IBM Plex Mono', monospace;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .status-badge {
+            font-size: 11px;
+            font-family: var(--mono);
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: var(--green-dim);
+            color: var(--green);
+            border: 1px solid rgba(52, 211, 153, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .status-badge.offline {
+            background: var(--red-dim);
+            color: var(--red);
+            border-color: rgba(248, 113, 113, 0.25);
+        }
+
+        .status-badge.offline .status-dot {
+            background: var(--red);
+            animation: none;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        #config-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        #config-panel h2 {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
+        }
+
+        .config-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        label {
+            font-size: 12px;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 6px;
+            font-family: var(--mono);
+        }
+
+        input,
+        select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 13px;
+            padding: 10px 12px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--accent-border);
+        }
+
+        input::placeholder {
+            color: var(--muted);
+        }
+
+        button {
+            font-family: var(--font);
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--border-hover);
+            color: var(--text);
+        }
+
+        .btn-danger {
+            background: var(--red-dim);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            color: var(--red);
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-danger:hover {
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .count-badge {
+            font-size: 12px;
+            font-family: var(--mono);
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            font-size: 12px;
+            font-family: var(--mono);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--accent-border);
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-box input {
+            padding-left: 36px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .device-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            transition: border-color 0.15s;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .device-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            gap: 10px;
+        }
+
+        .device-type-badge {
+            font-size: 10px;
+            font-family: var(--mono);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .type-dvr {
+            background: var(--accent-dim);
+            color: var(--accent);
+            border: 1px solid var(--accent-border);
+        }
+
+        .type-facial {
+            background: var(--amber-dim);
+            color: var(--amber);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+        }
+
+        .device-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .device-location {
+            font-size: 12px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 8px 12px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            font-family: var(--mono);
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .info-value {
+            font-size: 13px;
+            font-family: var(--mono);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 2px 6px;
+            font-size: 12px;
+            border-radius: 4px;
+            transition: color 0.1s;
+        }
+
+        .copy-btn:hover {
+            color: var(--accent);
+        }
+
+        .password-dots {
+            letter-spacing: 2px;
+        }
+
+        .eye-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 2px 4px;
+            font-size: 13px;
+            border-radius: 4px;
+            transition: color 0.1s;
+        }
+
+        .eye-btn:hover {
+            color: var(--text);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.75rem;
+            width: 100%;
+            max-width: 480px;
+            animation: slideUp 0.2s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--muted);
+        }
+
+        .empty-state .icon {
+            font-size: 40px;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 18px;
+            font-size: 13px;
+            font-family: var(--mono);
+            color: var(--green);
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.2s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: none;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: var(--muted);
+            font-size: 14px;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 640px) {
+            main {
+                padding: 1rem;
+            }
+
+            .config-row {
+                grid-template-columns: 1fr;
+            }
+
+            .devices-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <div class="logo-icon">🔐</div>
+            Gerenciador de Dispositivos
+        </div>
+        <div id="conn-status" class="status-badge offline">
+            <div class="status-dot"></div>
+            <span>Desconectado</span>
+        </div>
+    </header>
+
+    <main>
+        <!-- Configuração do Supabase -->
+        <div id="config-panel">
+            <h2>⚙ Configuração do Supabase</h2>
+            <div class="config-row">
+                <div>
+                    <label>SUPABASE URL</label>
+                    <input type="text" id="sb-url" placeholder="https://xxxx.supabase.co">
+                </div>
+                <div>
+                    <label>ANON KEY</label>
+                    <input type="password" id="sb-key" placeholder="eyJhbGci...">
+                </div>
+                <button class="btn-primary" onclick="conectar()">Conectar</button>
+            </div>
+        </div>
+
+        <!-- Conteúdo principal (oculto até conectar) -->
+        <div id="main-content" style="display:none">
+            <div class="section-header">
+                <div style="display:flex;align-items:center">
+                    <span class="section-title">Dispositivos</span>
+                    <span class="count-badge" id="count-badge">0</span>
+                </div>
+                <button class="btn-primary" onclick="abrirModal()">+ Novo Dispositivo</button>
+            </div>
+
+            <div class="filters">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search" placeholder="Buscar por nome ou local..." oninput="filtrar()">
+                </div>
+                <button class="filter-btn active" onclick="setFiltro('todos', this)">Todos</button>
+                <button class="filter-btn" onclick="setFiltro('DVR', this)">DVR</button>
+                <button class="filter-btn" onclick="setFiltro('Leitor Facial', this)">Leitor Facial</button>
+            </div>
+
+            <div id="devices-container">
+                <div class="loading">
+                    <div class="spinner"></div> Carregando dispositivos...
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de criação/edição -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-title" id="modal-title">Novo Dispositivo</div>
+            <input type="hidden" id="edit-id">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tipo de Dispositivo</label>
+                    <select id="f-tipo">
+                        <option value="DVR">DVR</option>
+                        <option value="Leitor Facial">Leitor Facial</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nome / Identificação</label>
+                    <input type="text" id="f-nome" placeholder="Ex: DVR Entrada Principal">
+                </div>
+                <div class="form-group full">
+                    <label>Localização</label>
+                    <input type="text" id="f-local" placeholder="Ex: Recepção, 2º Andar...">
+                </div>
+                <div class="form-group">
+                    <label>IP do Dispositivo</label>
+                    <input type="text" id="f-ip" placeholder="192.168.1.100">
+                </div>
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" id="f-usuario" placeholder="admin">
+                </div>
+                <div class="form-group full">
+                    <label>Senha</label>
+                    <input type="text" id="f-senha" placeholder="••••••••">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-ghost" onclick="fecharModal()">Cancelar</button>
+                <button class="btn-primary" id="btn-salvar" onclick="salvar()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let supabase = null;
+        let dispositivos = [];
+        let filtroAtual = 'todos';
+        let visiblePasswords = {};
+
+        function conectar() {
+            const url = document.getElementById('sb-url').value.trim();
+            const key = document.getElementById('sb-key').value.trim();
+            if (!url || !key) return showToast('Preencha URL e Anon Key!', 'error');
+            if (!window.supabase || !window.supabase.createClient) {
+                showToast('Supabase nao carregou. Verifique sua internet.', 'error');
+                return;
+            }
+            supabase = window.supabase.createClient(url, key);
+            carregarDispositivos();
+        }
+
+        async function carregarDispositivos() {
+            const { data, error } = await supabase
+                .from('dispositivos')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                showToast('Erro ao conectar. Verifique as credenciais.', 'error');
+                document.getElementById('conn-status').className = 'status-badge offline';
+                document.getElementById('conn-status').innerHTML = '<div class="status-dot"></div><span>Erro</span>';
+                return;
+            }
+
+            document.getElementById('conn-status').className = 'status-badge';
+            document.getElementById('conn-status').innerHTML = '<div class="status-dot"></div><span>Conectado</span>';
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('config-panel').style.marginBottom = '2rem';
+
+            dispositivos = data || [];
+            renderizar();
+        }
+
+        function filtrar() {
+            renderizar();
+        }
+
+        function setFiltro(tipo, btn) {
+            filtroAtual = tipo;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderizar();
+        }
+
+        function renderizar() {
+            const busca = document.getElementById('search').value.toLowerCase();
+            const filtrados = dispositivos.filter(d => {
+                const matchTipo = filtroAtual === 'todos' || d.tipo === filtroAtual;
+                const matchBusca = !busca ||
+                    d.nome.toLowerCase().includes(busca) ||
+                    (d.localizacao || '').toLowerCase().includes(busca) ||
+                    (d.ip || '').includes(busca);
+                return matchTipo && matchBusca;
+            });
+
+            document.getElementById('count-badge').textContent = filtrados.length;
+            const container = document.getElementById('devices-container');
+
+            if (!filtrados.length) {
+                container.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Nenhum dispositivo encontrado.</p></div>`;
+                return;
+            }
+
+            container.innerHTML = `<div class="devices-grid">${filtrados.map(d => cardHTML(d)).join('')}</div>`;
+        }
+
+        function cardHTML(d) {
+            const senha = visiblePasswords[d.id] ? d.senha : '<span class="password-dots">••••••••</span>';
+            const eyeLabel = visiblePasswords[d.id] ? '🙈' : '👁';
+            const badgeClass = d.tipo === 'DVR' ? 'type-dvr' : 'type-facial';
+
+            return `
+  <div class="device-card" id="card-${d.id}">
+    <div class="card-header">
+      <div>
+        <span class="device-type-badge ${badgeClass}">${d.tipo}</span>
+        <div class="device-name" style="margin-top:8px">${d.nome}</div>
+        <div class="device-location">📍 ${d.localizacao || '—'}</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-ghost" style="padding:6px 10px;font-size:12px" onclick="editarDispositivo('${d.id}')">✏</button>
+        <button class="btn-danger" onclick="excluir('${d.id}')">🗑</button>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info-row">
+        <span class="info-label">IP</span>
+        <span class="info-value">
+          ${d.ip || '—'}
+          ${d.ip ? `<button class="copy-btn" onclick="copiar('${d.ip}')">⎘</button>` : ''}
+        </span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Usuário</span>
+        <span class="info-value">
+          ${d.usuario || '—'}
+          ${d.usuario ? `<button class="copy-btn" onclick="copiar('${d.usuario}')">⎘</button>` : ''}
+        </span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Senha</span>
+        <span class="info-value" id="senha-${d.id}">
+          ${senha}
+          <button class="eye-btn" onclick="toggleSenha('${d.id}', '${(d.senha || '').replace(/'/g, "\\'")}')"> ${eyeLabel}</button>
+          ${d.senha ? `<button class="copy-btn" onclick="copiar('${(d.senha || '').replace(/'/g, "\\'")}')">⎘</button>` : ''}
+        </span>
+      </div>
+    </div>
+  </div>`;
+        }
+
+        function toggleSenha(id, senha) {
+            visiblePasswords[id] = !visiblePasswords[id];
+            const el = document.getElementById(`senha-${id}`);
+            const eyeLabel = visiblePasswords[id] ? '🙈' : '👁';
+            const shown = visiblePasswords[id] ? senha : '<span class="password-dots">••••••••</span>';
+            el.innerHTML = `${shown}<button class="eye-btn" onclick="toggleSenha('${id}', '${senha.replace(/'/g, "\\'")}')"> ${eyeLabel}</button><button class="copy-btn" onclick="copiar('${senha.replace(/'/g, "\\'")}')">⎘</button>`;
+        }
+
+        function copiar(texto) {
+            navigator.clipboard.writeText(texto).then(() => showToast('Copiado!'));
+        }
+
+        function abrirModal(id) {
+            document.getElementById('edit-id').value = '';
+            document.getElementById('f-tipo').value = 'DVR';
+            document.getElementById('f-nome').value = '';
+            document.getElementById('f-local').value = '';
+            document.getElementById('f-ip').value = '';
+            document.getElementById('f-usuario').value = '';
+            document.getElementById('f-senha').value = '';
+            document.getElementById('modal-title').textContent = 'Novo Dispositivo';
+            document.getElementById('btn-salvar').textContent = 'Salvar';
+            document.getElementById('modal').classList.add('open');
+        }
+
+        function editarDispositivo(id) {
+            const d = dispositivos.find(x => x.id == id);
+            if (!d) return;
+            document.getElementById('edit-id').value = d.id;
+            document.getElementById('f-tipo').value = d.tipo;
+            document.getElementById('f-nome').value = d.nome;
+            document.getElementById('f-local').value = d.localizacao || '';
+            document.getElementById('f-ip').value = d.ip || '';
+            document.getElementById('f-usuario').value = d.usuario || '';
+            document.getElementById('f-senha').value = d.senha || '';
+            document.getElementById('modal-title').textContent = 'Editar Dispositivo';
+            document.getElementById('btn-salvar').textContent = 'Atualizar';
+            document.getElementById('modal').classList.add('open');
+        }
+
+        function fecharModal() {
+            document.getElementById('modal').classList.remove('open');
+        }
+
+        async function salvar() {
+            const id = document.getElementById('edit-id').value;
+            const dados = {
+                tipo: document.getElementById('f-tipo').value,
+                nome: document.getElementById('f-nome').value.trim(),
+                localizacao: document.getElementById('f-local').value.trim(),
+                ip: document.getElementById('f-ip').value.trim(),
+                usuario: document.getElementById('f-usuario').value.trim(),
+                senha: document.getElementById('f-senha').value.trim(),
+            };
+
+            if (!dados.nome) return showToast('Nome obrigatório!', 'error');
+
+            const btn = document.getElementById('btn-salvar');
+            btn.disabled = true;
+
+            let error;
+            if (id) {
+                ({ error } = await supabase.from('dispositivos').update(dados).eq('id', id));
+            } else {
+                ({ error } = await supabase.from('dispositivos').insert([dados]));
+            }
+
+            btn.disabled = false;
+
+            if (error) return showToast('Erro ao salvar: ' + error.message, 'error');
+
+            showToast(id ? 'Dispositivo atualizado!' : 'Dispositivo adicionado!');
+            fecharModal();
+            carregarDispositivos();
+        }
+
+        async function excluir(id) {
+            if (!confirm('Confirmar exclusão do dispositivo?')) return;
+            const { error } = await supabase.from('dispositivos').delete().eq('id', id);
+            if (error) return showToast('Erro ao excluir', 'error');
+            showToast('Dispositivo removido!');
+            carregarDispositivos();
+        }
+
+        function showToast(msg, tipo) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.color = tipo === 'error' ? 'var(--red)' : 'var(--green)';
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
+        }
+
+        document.getElementById('modal').addEventListener('click', function (e) {
+            if (e.target === this) fecharModal();
+        });
+    </script>
+</body>
+
+</html>
