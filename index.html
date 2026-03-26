@@ -14,7 +14,7 @@
         *::after {
             box-sizing: border-box;
             margin: 0;
-            padding: 0;
+            padding: 0
         }
 
         :root {
@@ -22,19 +22,19 @@
             --surface: #181c27;
             --surface2: #1e2334;
             --border: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(255, 255, 255, 0.16);
+            --border-h: rgba(255, 255, 255, 0.18);
             --text: #e8eaf0;
             --muted: #7a8099;
             --accent: #4f8ef7;
-            --accent-dim: rgba(79, 142, 247, 0.12);
-            --accent-border: rgba(79, 142, 247, 0.35);
+            --adim: rgba(79, 142, 247, 0.12);
+            --aborder: rgba(79, 142, 247, 0.35);
             --green: #34d399;
-            --green-dim: rgba(52, 211, 153, 0.1);
+            --gdim: rgba(52, 211, 153, 0.1);
             --amber: #fbbf24;
-            --amber-dim: rgba(251, 191, 36, 0.1);
+            --adimb: rgba(251, 191, 36, 0.1);
             --red: #f87171;
-            --red-dim: rgba(248, 113, 113, 0.1);
-            --radius: 10px;
+            --rdim: rgba(248, 113, 113, 0.1);
+            --r: 10px;
             --font: 'Sora', sans-serif;
             --mono: 'IBM Plex Mono', monospace;
         }
@@ -43,7 +43,7 @@
             font-family: var(--font);
             background: var(--bg);
             color: var(--text);
-            min-height: 100vh;
+            min-height: 100vh
         }
 
         header {
@@ -55,7 +55,7 @@
             justify-content: space-between;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 100
         }
 
         .logo {
@@ -63,50 +63,51 @@
             align-items: center;
             gap: 10px;
             font-size: 15px;
-            font-weight: 600;
-            letter-spacing: -0.02em;
+            font-weight: 600
         }
 
         .logo-icon {
             width: 32px;
             height: 32px;
-            background: var(--accent-dim);
-            border: 1px solid var(--accent-border);
+            background: var(--adim);
+            border: 1px solid var(--aborder);
             border-radius: 8px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 16px;
+            justify-content: center
         }
 
-        .status-badge {
+        .badge {
             font-size: 11px;
             font-family: var(--mono);
             padding: 4px 10px;
             border-radius: 20px;
-            background: var(--red-dim);
-            color: var(--red);
-            border: 1px solid rgba(248, 113, 113, 0.25);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 6px
         }
 
-        .status-badge.online {
-            background: var(--green-dim);
+        .badge.off {
+            background: var(--rdim);
+            color: var(--red);
+            border: 1px solid rgba(248, 113, 113, 0.25)
+        }
+
+        .badge.on {
+            background: var(--gdim);
             color: var(--green);
-            border-color: rgba(52, 211, 153, 0.25);
+            border: 1px solid rgba(52, 211, 153, 0.25)
         }
 
-        .status-dot {
+        .dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: currentColor;
+            background: currentColor
         }
 
-        .status-badge.online .status-dot {
-            animation: pulse 2s infinite;
+        .badge.on .dot {
+            animation: pulse 2s infinite
         }
 
         @keyframes pulse {
@@ -124,31 +125,31 @@
         main {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 2rem
         }
 
-        #config-panel {
+        .panel {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: var(--r);
             padding: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2rem
         }
 
-        #config-panel h2 {
+        .panel-title {
             font-size: 12px;
             font-weight: 500;
             color: var(--muted);
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 1rem;
+            letter-spacing: .08em;
+            margin-bottom: 1rem
         }
 
-        .config-row {
+        .cfg-row {
             display: grid;
             grid-template-columns: 1fr 1fr auto;
             gap: 12px;
-            align-items: end;
+            align-items: end
         }
 
         label {
@@ -156,7 +157,7 @@
             color: var(--muted);
             display: block;
             margin-bottom: 6px;
-            font-family: var(--mono);
+            font-family: var(--mono)
         }
 
         input,
@@ -170,16 +171,16 @@
             font-size: 13px;
             padding: 10px 12px;
             outline: none;
-            transition: border-color 0.15s;
+            transition: border-color .15s
         }
 
         input:focus,
         select:focus {
-            border-color: var(--accent-border);
+            border-color: var(--aborder)
         }
 
         input::placeholder {
-            color: var(--muted);
+            color: var(--muted)
         }
 
         button {
@@ -190,65 +191,99 @@
             border-radius: 8px;
             border: none;
             cursor: pointer;
-            transition: all 0.15s;
-            white-space: nowrap;
+            transition: all .15s;
+            white-space: nowrap
         }
 
-        .btn-primary {
+        .bp {
             background: var(--accent);
-            color: #fff;
+            color: #fff
         }
 
-        .btn-primary:hover {
-            opacity: 0.9;
+        .bp:hover {
+            opacity: .9
         }
 
-        .btn-primary:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
+        .bp:disabled {
+            opacity: .4;
+            cursor: not-allowed
         }
 
-        .btn-ghost {
+        .bg2 {
             background: transparent;
             border: 1px solid var(--border);
-            color: var(--muted);
+            color: var(--muted)
         }
 
-        .btn-ghost:hover {
-            border-color: var(--border-hover);
-            color: var(--text);
+        .bg2:hover {
+            border-color: var(--border-h);
+            color: var(--text)
         }
 
-        .btn-danger {
-            background: var(--red-dim);
-            border: 1px solid rgba(248, 113, 113, 0.2);
+        .bd {
+            background: var(--rdim);
+            border: 1px solid rgba(248, 113, 113, .2);
             color: var(--red);
             padding: 6px 12px;
-            font-size: 12px;
+            font-size: 12px
         }
 
-        .btn-danger:hover {
-            background: rgba(248, 113, 113, 0.2);
+        .bd:hover {
+            background: rgba(248, 113, 113, .2)
         }
 
-        .btn-sm {
+        .bsm {
             padding: 6px 10px;
-            font-size: 12px;
+            font-size: 12px
         }
 
-        .section-header {
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .breadcrumb .sep {
+            opacity: .4
+        }
+
+        .breadcrumb .link {
+            color: var(--accent);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: var(--font);
+            font-size: 13px;
+            padding: 0
+        }
+
+        .breadcrumb .link:hover {
+            text-decoration: underline
+        }
+
+        .breadcrumb .cur {
+            color: var(--text);
+            font-weight: 500
+        }
+
+        /* Topo de seção */
+        .sec-hd {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.25rem
         }
 
-        .section-title {
+        .sec-title {
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 600
         }
 
-        .count-badge {
+        .cnt {
             font-size: 12px;
             font-family: var(--mono);
             background: var(--surface2);
@@ -256,71 +291,33 @@
             color: var(--muted);
             padding: 2px 10px;
             border-radius: 20px;
-            margin-left: 10px;
+            margin-left: 8px
         }
 
-        .filters {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 1.25rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            font-size: 12px;
-            font-family: var(--mono);
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: transparent;
-            color: var(--muted);
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .filter-btn:hover,
-        .filter-btn.active {
-            border-color: var(--accent-border);
-            color: var(--accent);
-            background: var(--accent-dim);
-        }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .search-box input {
-            padding-left: 36px;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--muted);
-            font-size: 14px;
-            pointer-events: none;
-        }
-
-        .devices-grid {
+        /* Cards de condomínio */
+        .condo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem
         }
 
-        .device-card {
+        .condo-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: var(--r);
             padding: 1.25rem;
-            transition: border-color 0.15s;
-            animation: fadeIn 0.2s ease;
+            cursor: pointer;
+            transition: all .15s;
+            animation: fi .2s ease;
+            position: relative
         }
 
-        @keyframes fadeIn {
+        .condo-card:hover {
+            border-color: var(--accent);
+            background: var(--surface2)
+        }
+
+        @keyframes fi {
             from {
                 opacity: 0;
                 transform: translateY(6px)
@@ -332,90 +329,184 @@
             }
         }
 
-        .device-card:hover {
-            border-color: var(--border-hover);
+        .condo-icon {
+            font-size: 28px;
+            margin-bottom: .75rem
         }
 
-        .card-header {
+        .condo-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px
+        }
+
+        .condo-meta {
+            font-size: 12px;
+            color: var(--muted);
+            font-family: var(--mono)
+        }
+
+        .condo-actions {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity .15s
+        }
+
+        .condo-card:hover .condo-actions {
+            opacity: 1
+        }
+
+        /* Filtros dispositivos */
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap
+        }
+
+        .fbtn {
+            font-size: 12px;
+            font-family: var(--mono);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all .15s
+        }
+
+        .fbtn:hover,
+        .fbtn.active {
+            border-color: var(--aborder);
+            color: var(--accent);
+            background: var(--adim)
+        }
+
+        .sbox {
+            position: relative;
+            flex: 1;
+            min-width: 200px
+        }
+
+        .sbox input {
+            padding-left: 36px
+        }
+
+        .sico {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 14px;
+            pointer-events: none
+        }
+
+        /* Cards de dispositivo */
+        .dev-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem
+        }
+
+        .dev-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 1.25rem;
+            transition: border-color .15s;
+            animation: fi .2s ease
+        }
+
+        .dev-card:hover {
+            border-color: var(--border-h)
+        }
+
+        .card-hd {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             margin-bottom: 1rem;
-            gap: 10px;
+            gap: 10px
         }
 
-        .device-type-badge {
+        .tbadge {
             font-size: 10px;
             font-family: var(--mono);
             font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: .08em;
             padding: 3px 8px;
-            border-radius: 4px;
+            border-radius: 4px
         }
 
-        .type-dvr {
-            background: var(--accent-dim);
+        .tdvr {
+            background: var(--adim);
             color: var(--accent);
-            border: 1px solid var(--accent-border);
+            border: 1px solid var(--aborder)
         }
 
-        .type-facial {
-            background: var(--amber-dim);
+        .tfacial {
+            background: var(--adimb);
             color: var(--amber);
-            border: 1px solid rgba(251, 191, 36, 0.25);
+            border: 1px solid rgba(251, 191, 36, .25)
         }
 
-        .device-name {
+        .dname {
             font-size: 15px;
             font-weight: 600;
-            margin: 8px 0 3px;
+            margin: 8px 0 3px
         }
 
-        .device-location {
+        .dloc {
             font-size: 12px;
-            color: var(--muted);
+            color: var(--muted)
         }
 
-        .card-actions {
+        .cactions {
             display: flex;
-            gap: 6px;
+            gap: 6px
         }
 
-        .info-grid {
+        .igrid {
             display: grid;
-            gap: 8px;
+            gap: 8px
         }
 
-        .info-row {
+        .irow {
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: var(--bg);
             border: 1px solid var(--border);
             border-radius: 7px;
-            padding: 8px 12px;
+            padding: 8px 12px
         }
 
-        .info-label {
+        .ilabel {
             font-size: 11px;
             font-family: var(--mono);
             color: var(--muted);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: .06em
         }
 
-        .info-value {
+        .ival {
             font-size: 13px;
             font-family: var(--mono);
             color: var(--text);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 8px
         }
 
-        .copy-btn,
-        .eye-btn {
+        .icopy,
+        .ieye {
             background: none;
             border: none;
             color: var(--muted);
@@ -423,30 +514,31 @@
             padding: 2px 6px;
             font-size: 13px;
             border-radius: 4px;
-            transition: color 0.1s;
+            transition: color .1s
         }
 
-        .copy-btn:hover {
-            color: var(--accent);
+        .icopy:hover {
+            color: var(--accent)
         }
 
-        .eye-btn:hover {
-            color: var(--text);
+        .ieye:hover {
+            color: var(--text)
         }
 
-        .modal-overlay {
+        /* Modal */
+        .overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, .75);
             z-index: 200;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
+            padding: 1rem
         }
 
-        .modal-overlay.open {
-            display: flex;
+        .overlay.open {
+            display: flex
         }
 
         .modal {
@@ -456,10 +548,10 @@
             padding: 1.75rem;
             width: 100%;
             max-width: 480px;
-            animation: slideUp 0.2s ease;
+            animation: su .2s ease
         }
 
-        @keyframes slideUp {
+        @keyframes su {
             from {
                 opacity: 0;
                 transform: translateY(16px)
@@ -471,47 +563,43 @@
             }
         }
 
-        .modal-title {
+        .mtitle {
             font-size: 16px;
             font-weight: 600;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.5rem
         }
 
-        .form-row {
+        .frow {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 12px
         }
 
-        .form-group {
-            margin-bottom: 14px;
+        .fg {
+            margin-bottom: 14px
         }
 
-        .form-group.full {
-            grid-column: 1 / -1;
+        .fg.full {
+            grid-column: 1/-1
         }
 
-        .modal-actions {
+        .mactions {
             display: flex;
             gap: 10px;
             justify-content: flex-end;
-            margin-top: 1.5rem;
+            margin-top: 1.5rem
         }
 
-        .empty-state {
+        .empty {
             text-align: center;
             padding: 4rem 2rem;
-            color: var(--muted);
+            color: var(--muted)
         }
 
-        .empty-state .icon {
+        .empty .ico {
             font-size: 40px;
             margin-bottom: 1rem;
-            opacity: 0.4;
-        }
-
-        .empty-state p {
-            font-size: 14px;
+            opacity: .4
         }
 
         .toast {
@@ -525,40 +613,7 @@
             font-size: 13px;
             font-family: var(--mono);
             z-index: 999;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.2s;
-            pointer-events: none;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: none;
-        }
-
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem;
-            color: var(--muted);
-            font-size: 14px;
-            gap: 10px;
-        }
-
-        .spinner {
-            width: 18px;
-            height: 18px;
-            border: 2px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg)
-            }
+            pointer-events: none
         }
 
         @media(max-width:640px) {
@@ -566,15 +621,16 @@
                 padding: 1rem
             }
 
-            .config-row {
+            .cfg-row {
                 grid-template-columns: 1fr
             }
 
-            .devices-grid {
+            .condo-grid,
+            .dev-grid {
                 grid-template-columns: 1fr
             }
 
-            .form-row {
+            .frow {
                 grid-template-columns: 1fr
             }
         }
@@ -582,319 +638,306 @@
 </head>
 
 <body>
+    <div id="app"></div>
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+        import { createElement as h, useState, useCallback } from 'https://esm.sh/react@18';
+        import { createRoot } from 'https://esm.sh/react-dom@18/client';
 
-    <header>
-        <div class="logo">
-            <div class="logo-icon">🔐</div>
-            Gerenciador de Dispositivos
-        </div>
-        <div id="conn-status" class="status-badge">
-            <div class="status-dot"></div>
-            <span id="conn-label">Desconectado</span>
-        </div>
-    </header>
+        function App() {
+            const [sbUrl, setSbUrl] = useState('');
+            const [sbKey, setSbKey] = useState('');
+            const [client, setClient] = useState(null);
+            const [conectando, setConectando] = useState(false);
 
-    <main>
-        <div id="config-panel">
-            <h2>Configuração do Supabase</h2>
-            <div class="config-row">
-                <div>
-                    <label>SUPABASE URL</label>
-                    <input type="text" id="sb-url" placeholder="https://xxxx.supabase.co">
-                </div>
-                <div>
-                    <label>ANON KEY</label>
-                    <input type="password" id="sb-key" placeholder="eyJhbGci...">
-                </div>
-                <button class="btn-primary" id="btn-conectar">Conectar</button>
-            </div>
-        </div>
+            // Navegação: null = lista condominios, objeto = dentro do condominio
+            const [condoAtual, setCondoAtual] = useState(null);
 
-        <div id="main-content" style="display:none">
-            <div class="section-header">
-                <div style="display:flex;align-items:center">
-                    <span class="section-title">Dispositivos</span>
-                    <span class="count-badge" id="count-badge">0</span>
-                </div>
-                <button class="btn-primary" id="btn-novo">+ Novo Dispositivo</button>
-            </div>
-            <div class="filters">
-                <div class="search-box">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="search" placeholder="Buscar por nome ou local...">
-                </div>
-                <button class="filter-btn active" data-filtro="todos">Todos</button>
-                <button class="filter-btn" data-filtro="DVR">DVR</button>
-                <button class="filter-btn" data-filtro="Leitor Facial">Leitor Facial</button>
-            </div>
-            <div id="devices-container">
-                <div class="loading">
-                    <div class="spinner"></div> Carregando...
-                </div>
-            </div>
-        </div>
-    </main>
+            const [condominios, setCondominios] = useState([]);
+            const [dispositivos, setDispositivos] = useState([]);
+            const [filtro, setFiltro] = useState('todos');
+            const [busca, setBusca] = useState('');
+            const [senhasVisiveis, setSenhasVisiveis] = useState({});
 
-    <div class="modal-overlay" id="modal">
-        <div class="modal">
-            <div class="modal-title" id="modal-title">Novo Dispositivo</div>
-            <input type="hidden" id="edit-id">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Tipo</label>
-                    <select id="f-tipo">
-                        <option value="DVR">DVR</option>
-                        <option value="Leitor Facial">Leitor Facial</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Nome / Identificação</label>
-                    <input type="text" id="f-nome" placeholder="Ex: DVR Entrada Principal">
-                </div>
-                <div class="form-group full">
-                    <label>Localização</label>
-                    <input type="text" id="f-local" placeholder="Ex: Recepção, 2º Andar...">
-                </div>
-                <div class="form-group">
-                    <label>IP do Dispositivo</label>
-                    <input type="text" id="f-ip" placeholder="192.168.1.100">
-                </div>
-                <div class="form-group">
-                    <label>Usuário</label>
-                    <input type="text" id="f-usuario" placeholder="admin">
-                </div>
-                <div class="form-group full">
-                    <label>Senha</label>
-                    <input type="text" id="f-senha" placeholder="••••••••">
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button class="btn-ghost" id="btn-cancelar">Cancelar</button>
-                <button class="btn-primary" id="btn-salvar">Salvar</button>
-            </div>
-        </div>
-    </div>
+            // Modal: null | 'novo-condo' | 'edit-condo' | 'novo-dev' | objeto-dev
+            const [modal, setModal] = useState(null);
+            const [formCondo, setFormCondo] = useState({ nome: '' });
+            const [formDev, setFormDev] = useState({ tipo: 'DVR', nome: '', localizacao: '', ip: '', usuario: '', senha: '' });
+            const [salvando, setSalvando] = useState(false);
+            const [toast, setToast] = useState(null);
 
-    <div class="toast" id="toast"></div>
-
-    <script>
-        (function () {
-            var script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
-            script.onload = init;
-            script.onerror = function () {
-                showToast('Falha ao carregar Supabase. Verifique sua internet.', 'error');
+            const showToast = (msg, tipo = 'ok') => {
+                setToast({ msg, tipo });
+                setTimeout(() => setToast(null), 2500);
             };
-            document.head.appendChild(script);
 
-            var client = null;
-            var dispositivos = [];
-            var filtroAtual = 'todos';
-            var senhasVisiveis = {};
+            const carregarCondominios = async (c) => {
+                const cl = c || client;
+                const { data, error } = await cl.from('condominios').select('id, nome, created_at').order('nome');
+                if (error) { showToast('Erro: ' + error.message, 'erro'); return; }
+                // contar dispositivos por condomínio
+                const { data: devs } = await cl.from('dispositivos').select('condominio_id');
+                const counts = {};
+                (devs || []).forEach(d => { counts[d.condominio_id] = (counts[d.condominio_id] || 0) + 1; });
+                setCondominios((data || []).map(c => ({ ...c, total: counts[c.id] || 0 })));
+            };
 
-            function init() {
-                document.getElementById('btn-conectar').addEventListener('click', conectar);
-                document.getElementById('btn-novo').addEventListener('click', function () { abrirModal(); });
-                document.getElementById('btn-cancelar').addEventListener('click', fecharModal);
-                document.getElementById('btn-salvar').addEventListener('click', salvar);
-                document.getElementById('search').addEventListener('input', renderizar);
-                document.getElementById('modal').addEventListener('click', function (e) { if (e.target === this) fecharModal(); });
-                document.querySelectorAll('.filter-btn').forEach(function (btn) {
-                    btn.addEventListener('click', function () {
-                        filtroAtual = this.dataset.filtro;
-                        document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
-                        this.classList.add('active');
-                        renderizar();
-                    });
-                });
-            }
+            const carregarDispositivos = async (condoId, cl) => {
+                const c = cl || client;
+                const { data, error } = await c.from('dispositivos').select('*').eq('condominio_id', condoId).order('created_at', { ascending: false });
+                if (error) { showToast('Erro: ' + error.message, 'erro'); return; }
+                setDispositivos(data || []);
+            };
 
-            function conectar() {
-                var url = document.getElementById('sb-url').value.trim();
-                var key = document.getElementById('sb-key').value.trim();
-                if (!url || !key) return showToast('Preencha URL e Anon Key!', 'error');
-                client = window.supabase.createClient(url, key);
-                carregarDispositivos();
-            }
+            const conectar = async () => {
+                if (!sbUrl || !sbKey) return showToast('Preencha URL e Anon Key!', 'erro');
+                setConectando(true);
+                const c = createClient(sbUrl.trim(), sbKey.trim());
+                const { error } = await c.from('condominios').select('id').limit(1);
+                setConectando(false);
+                if (error) { showToast('Falha: ' + error.message, 'erro'); return; }
+                setClient(c);
+                carregarCondominios(c);
+            };
 
-            async function carregarDispositivos() {
-                var btn = document.getElementById('btn-conectar');
-                btn.disabled = true;
-                btn.textContent = 'Conectando...';
+            const entrarCondo = async (condo) => {
+                setCondoAtual(condo);
+                setBusca('');
+                setFiltro('todos');
+                await carregarDispositivos(condo.id);
+            };
 
-                var result = await client.from('dispositivos').select('*').order('created_at', { ascending: false });
+            const voltarLista = () => {
+                setCondoAtual(null);
+                setDispositivos([]);
+                carregarCondominios();
+            };
 
-                btn.disabled = false;
-                btn.textContent = 'Conectar';
+            // ---- CONDOMÍNIO ----
+            const abrirNovoCondo = () => { setFormCondo({ nome: '' }); setModal('novo-condo'); };
+            const abrirEditCondo = (e, condo) => { e.stopPropagation(); setFormCondo({ nome: condo.nome, id: condo.id }); setModal('edit-condo'); };
 
-                if (result.error) {
-                    showToast('Erro: ' + result.error.message, 'error');
-                    setStatus(false);
-                    return;
-                }
+            const salvarCondo = async () => {
+                if (!formCondo.nome.trim()) return showToast('Nome obrigatório!', 'erro');
+                setSalvando(true);
+                const { error } = formCondo.id
+                    ? await client.from('condominios').update({ nome: formCondo.nome.trim() }).eq('id', formCondo.id)
+                    : await client.from('condominios').insert([{ nome: formCondo.nome.trim() }]);
+                setSalvando(false);
+                if (error) return showToast('Erro: ' + error.message, 'erro');
+                showToast(formCondo.id ? 'Condomínio atualizado!' : 'Condomínio criado!');
+                setModal(null);
+                carregarCondominios();
+            };
 
-                setStatus(true);
-                document.getElementById('main-content').style.display = 'block';
-                dispositivos = result.data || [];
-                renderizar();
-            }
+            const excluirCondo = async (e, id) => {
+                e.stopPropagation();
+                if (!confirm('Excluir condomínio e todos os seus dispositivos?')) return;
+                const { error } = await client.from('condominios').delete().eq('id', id);
+                if (error) return showToast('Erro ao excluir', 'erro');
+                showToast('Condomínio removido!');
+                carregarCondominios();
+            };
 
-            function setStatus(online) {
-                var el = document.getElementById('conn-status');
-                var label = document.getElementById('conn-label');
-                el.className = 'status-badge' + (online ? ' online' : '');
-                label.textContent = online ? 'Conectado' : 'Desconectado';
-            }
+            // ---- DISPOSITIVOS ----
+            const abrirNovoDev = () => { setFormDev({ tipo: 'DVR', nome: '', localizacao: '', ip: '', usuario: '', senha: '' }); setModal('novo-dev'); };
+            const abrirEditDev = (d) => { setFormDev({ tipo: d.tipo, nome: d.nome, localizacao: d.localizacao || '', ip: d.ip || '', usuario: d.usuario || '', senha: d.senha || '', id: d.id }); setModal('edit-dev'); };
 
-            function renderizar() {
-                var busca = document.getElementById('search').value.toLowerCase();
-                var filtrados = dispositivos.filter(function (d) {
-                    var matchTipo = filtroAtual === 'todos' || d.tipo === filtroAtual;
-                    var matchBusca = !busca ||
-                        (d.nome || '').toLowerCase().includes(busca) ||
-                        (d.localizacao || '').toLowerCase().includes(busca) ||
-                        (d.ip || '').includes(busca);
-                    return matchTipo && matchBusca;
-                });
-
-                document.getElementById('count-badge').textContent = filtrados.length;
-                var container = document.getElementById('devices-container');
-
-                if (!filtrados.length) {
-                    container.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Nenhum dispositivo encontrado.</p></div>';
-                    return;
-                }
-
-                container.innerHTML = '<div class="devices-grid">' + filtrados.map(cardHTML).join('') + '</div>';
-
-                container.querySelectorAll('[data-action]').forEach(function (el) {
-                    el.addEventListener('click', function () {
-                        var action = this.dataset.action;
-                        var id = this.dataset.id;
-                        var val = this.dataset.val;
-                        if (action === 'editar') editarDispositivo(id);
-                        if (action === 'excluir') excluir(id);
-                        if (action === 'copiar') copiar(val);
-                        if (action === 'toggle-senha') toggleSenha(id);
-                    });
-                });
-            }
-
-            function cardHTML(d) {
-                var visivel = senhasVisiveis[d.id];
-                var senhaTexto = visivel ? (d.senha || '—') : '••••••••';
-                var badgeClass = d.tipo === 'DVR' ? 'type-dvr' : 'type-facial';
-                return '<div class="device-card">' +
-                    '<div class="card-header">' +
-                    '<div>' +
-                    '<span class="device-type-badge ' + badgeClass + '">' + d.tipo + '</span>' +
-                    '<div class="device-name">' + (d.nome || '') + '</div>' +
-                    '<div class="device-location">📍 ' + (d.localizacao || '—') + '</div>' +
-                    '</div>' +
-                    '<div class="card-actions">' +
-                    '<button class="btn-ghost btn-sm" data-action="editar" data-id="' + d.id + '">✏</button>' +
-                    '<button class="btn-danger" data-action="excluir" data-id="' + d.id + '">🗑</button>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="info-grid">' +
-                    infoRow('IP', d.ip, d.ip) +
-                    infoRow('Usuário', d.usuario, d.usuario) +
-                    '<div class="info-row">' +
-                    '<span class="info-label">Senha</span>' +
-                    '<span class="info-value">' +
-                    '<span id="senha-txt-' + d.id + '">' + senhaTexto + '</span>' +
-                    '<button class="eye-btn" data-action="toggle-senha" data-id="' + d.id + '">' + (visivel ? '🙈' : '👁') + '</button>' +
-                    (d.senha ? '<button class="copy-btn" data-action="copiar" data-val="' + escAttr(d.senha) + '">⎘</button>' : '') +
-                    '</span>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>';
-            }
-
-            function infoRow(label, valor, copyVal) {
-                return '<div class="info-row">' +
-                    '<span class="info-label">' + label + '</span>' +
-                    '<span class="info-value">' +
-                    (valor || '—') +
-                    (copyVal ? '<button class="copy-btn" data-action="copiar" data-val="' + escAttr(copyVal) + '">⎘</button>' : '') +
-                    '</span>' +
-                    '</div>';
-            }
-
-            function escAttr(s) { return (s || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
-
-            function toggleSenha(id) {
-                senhasVisiveis[id] = !senhasVisiveis[id];
-                var d = dispositivos.find(function (x) { return x.id == id; });
-                var el = document.getElementById('senha-txt-' + id);
-                if (el && d) el.textContent = senhasVisiveis[id] ? (d.senha || '—') : '••••••••';
-                var btn = document.querySelector('[data-action="toggle-senha"][data-id="' + id + '"]');
-                if (btn) btn.textContent = senhasVisiveis[id] ? '🙈' : '👁';
-            }
-
-            function copiar(texto) {
-                navigator.clipboard.writeText(texto).then(function () { showToast('Copiado!'); });
-            }
-
-            function abrirModal(d) {
-                document.getElementById('edit-id').value = d ? d.id : '';
-                document.getElementById('f-tipo').value = d ? d.tipo : 'DVR';
-                document.getElementById('f-nome').value = d ? d.nome : '';
-                document.getElementById('f-local').value = d ? (d.localizacao || '') : '';
-                document.getElementById('f-ip').value = d ? (d.ip || '') : '';
-                document.getElementById('f-usuario').value = d ? (d.usuario || '') : '';
-                document.getElementById('f-senha').value = d ? (d.senha || '') : '';
-                document.getElementById('modal-title').textContent = d ? 'Editar Dispositivo' : 'Novo Dispositivo';
-                document.getElementById('btn-salvar').textContent = d ? 'Atualizar' : 'Salvar';
-                document.getElementById('modal').classList.add('open');
-            }
-
-            function fecharModal() { document.getElementById('modal').classList.remove('open'); }
-
-            function editarDispositivo(id) {
-                var d = dispositivos.find(function (x) { return x.id == id; });
-                if (d) abrirModal(d);
-            }
-
-            async function salvar() {
-                var id = document.getElementById('edit-id').value;
-                var dados = {
-                    tipo: document.getElementById('f-tipo').value,
-                    nome: document.getElementById('f-nome').value.trim(),
-                    localizacao: document.getElementById('f-local').value.trim(),
-                    ip: document.getElementById('f-ip').value.trim(),
-                    usuario: document.getElementById('f-usuario').value.trim(),
-                    senha: document.getElementById('f-senha').value.trim(),
-                };
-                if (!dados.nome) return showToast('Nome obrigatório!', 'error');
-                var btn = document.getElementById('btn-salvar');
-                btn.disabled = true;
-                var result = id
-                    ? await client.from('dispositivos').update(dados).eq('id', id)
+            const salvarDev = async () => {
+                if (!formDev.nome.trim()) return showToast('Nome obrigatório!', 'erro');
+                setSalvando(true);
+                const dados = { tipo: formDev.tipo, nome: formDev.nome.trim(), localizacao: formDev.localizacao.trim(), ip: formDev.ip.trim(), usuario: formDev.usuario.trim(), senha: formDev.senha.trim(), condominio_id: condoAtual.id };
+                const { error } = formDev.id
+                    ? await client.from('dispositivos').update(dados).eq('id', formDev.id)
                     : await client.from('dispositivos').insert([dados]);
-                btn.disabled = false;
-                if (result.error) return showToast('Erro: ' + result.error.message, 'error');
-                showToast(id ? 'Atualizado!' : 'Dispositivo adicionado!');
-                fecharModal();
-                carregarDispositivos();
-            }
+                setSalvando(false);
+                if (error) return showToast('Erro: ' + error.message, 'erro');
+                showToast(formDev.id ? 'Atualizado!' : 'Adicionado!');
+                setModal(null);
+                carregarDispositivos(condoAtual.id);
+            };
 
-            async function excluir(id) {
+            const excluirDev = async (id) => {
                 if (!confirm('Confirmar exclusão?')) return;
-                var result = await client.from('dispositivos').delete().eq('id', id);
-                if (result.error) return showToast('Erro ao excluir', 'error');
+                const { error } = await client.from('dispositivos').delete().eq('id', id);
+                if (error) return showToast('Erro ao excluir', 'erro');
                 showToast('Removido!');
-                carregarDispositivos();
-            }
+                carregarDispositivos(condoAtual.id);
+            };
 
-            function showToast(msg, tipo) {
-                var t = document.getElementById('toast');
-                t.textContent = msg;
-                t.style.color = tipo === 'error' ? 'var(--red)' : 'var(--green)';
-                t.classList.add('show');
-                setTimeout(function () { t.classList.remove('show'); }, 2500);
-            }
-        })();
+            const toggleSenha = (id) => setSenhasVisiveis(p => ({ ...p, [id]: !p[id] }));
+            const copiar = (txt) => navigator.clipboard.writeText(txt).then(() => showToast('Copiado!'));
+            const upDev = (k) => (e) => setFormDev(f => ({ ...f, [k]: e.target.value }));
+
+            const filtrados = dispositivos.filter(d => {
+                const mt = filtro === 'todos' || d.tipo === filtro;
+                const mb = !busca || (d.nome || '').toLowerCase().includes(busca.toLowerCase()) || (d.localizacao || '').toLowerCase().includes(busca.toLowerCase()) || (d.ip || '').includes(busca);
+                return mt && mb;
+            });
+
+            const modalAberto = modal !== null;
+
+            return h('div', null,
+                h('header', null,
+                    h('div', { className: 'logo' },
+                        h('div', { className: 'logo-icon' }, '🔐'),
+                        'Gerenciador de Dispositivos'
+                    ),
+                    h('div', { className: 'badge ' + (client ? 'on' : 'off') },
+                        h('div', { className: 'dot' }),
+                        client ? 'Conectado' : 'Desconectado'
+                    )
+                ),
+
+                h('main', null,
+
+                    // Config
+                    !client && h('div', { className: 'panel' },
+                        h('div', { className: 'panel-title' }, 'Configuração do Supabase'),
+                        h('div', { className: 'cfg-row' },
+                            h('div', null,
+                                h('label', null, 'SUPABASE URL'),
+                                h('input', { type: 'text', placeholder: 'https://xxxx.supabase.co', value: sbUrl, onChange: e => setSbUrl(e.target.value) })
+                            ),
+                            h('div', null,
+                                h('label', null, 'ANON KEY'),
+                                h('input', { type: 'password', placeholder: 'eyJhbGci...', value: sbKey, onChange: e => setSbKey(e.target.value) })
+                            ),
+                            h('button', { className: 'bp', onClick: conectar, disabled: conectando }, conectando ? 'Conectando...' : 'Conectar')
+                        )
+                    ),
+
+                    // Lista de Condomínios
+                    client && !condoAtual && h('div', null,
+                        h('div', { className: 'sec-hd' },
+                            h('div', { style: { display: 'flex', alignItems: 'center' } },
+                                h('span', { className: 'sec-title' }, 'Condomínios'),
+                                h('span', { className: 'cnt' }, condominios.length)
+                            ),
+                            h('button', { className: 'bp', onClick: abrirNovoCondo }, '+ Novo Condomínio')
+                        ),
+                        condominios.length === 0
+                            ? h('div', { className: 'empty' }, h('div', { className: 'ico' }, '🏢'), h('p', null, 'Nenhum condomínio cadastrado. Crie o primeiro!'))
+                            : h('div', { className: 'condo-grid' },
+                                condominios.map(condo =>
+                                    h('div', { key: condo.id, className: 'condo-card', onClick: () => entrarCondo(condo) },
+                                        h('div', { className: 'condo-actions' },
+                                            h('button', { className: 'bg2 bsm', onClick: e => abrirEditCondo(e, condo) }, '✏'),
+                                            h('button', { className: 'bd', onClick: e => excluirCondo(e, condo.id) }, '🗑')
+                                        ),
+                                        h('div', { className: 'condo-icon' }, '🏢'),
+                                        h('div', { className: 'condo-name' }, condo.nome),
+                                        h('div', { className: 'condo-meta' }, condo.total + ' dispositivo' + (condo.total !== 1 ? 's' : ''))
+                                    )
+                                )
+                            )
+                    ),
+
+                    // Dentro de um Condomínio
+                    client && condoAtual && h('div', null,
+                        h('div', { className: 'breadcrumb' },
+                            h('button', { className: 'link', onClick: voltarLista }, 'Condomínios'),
+                            h('span', { className: 'sep' }, '›'),
+                            h('span', { className: 'cur' }, condoAtual.nome)
+                        ),
+                        h('div', { className: 'sec-hd' },
+                            h('div', { style: { display: 'flex', alignItems: 'center' } },
+                                h('span', { className: 'sec-title' }, condoAtual.nome),
+                                h('span', { className: 'cnt' }, filtrados.length)
+                            ),
+                            h('button', { className: 'bp', onClick: abrirNovoDev }, '+ Novo Dispositivo')
+                        ),
+                        h('div', { className: 'filters' },
+                            h('div', { className: 'sbox' },
+                                h('span', { className: 'sico' }, '🔍'),
+                                h('input', { type: 'text', placeholder: 'Buscar...', value: busca, onChange: e => setBusca(e.target.value) })
+                            ),
+                            ['todos', 'DVR', 'Leitor Facial'].map(f =>
+                                h('button', { key: f, className: 'fbtn' + (filtro === f ? ' active' : ''), onClick: () => setFiltro(f) }, f === 'todos' ? 'Todos' : f)
+                            )
+                        ),
+                        filtrados.length === 0
+                            ? h('div', { className: 'empty' }, h('div', { className: 'ico' }, '📭'), h('p', null, 'Nenhum dispositivo neste condomínio.'))
+                            : h('div', { className: 'dev-grid' },
+                                filtrados.map(d =>
+                                    h('div', { key: d.id, className: 'dev-card' },
+                                        h('div', { className: 'card-hd' },
+                                            h('div', null,
+                                                h('span', { className: 'tbadge ' + (d.tipo === 'DVR' ? 'tdvr' : 'tfacial') }, d.tipo),
+                                                h('div', { className: 'dname' }, d.nome),
+                                                h('div', { className: 'dloc' }, '📍 ' + (d.localizacao || '—'))
+                                            ),
+                                            h('div', { className: 'cactions' },
+                                                h('button', { className: 'bg2 bsm', onClick: () => abrirEditDev(d) }, '✏'),
+                                                h('button', { className: 'bd', onClick: () => excluirDev(d.id) }, '🗑')
+                                            )
+                                        ),
+                                        h('div', { className: 'igrid' },
+                                            h('div', { className: 'irow' },
+                                                h('span', { className: 'ilabel' }, 'IP'),
+                                                h('span', { className: 'ival' }, d.ip || '—', d.ip && h('button', { className: 'icopy', onClick: () => copiar(d.ip) }, '⎘'))
+                                            ),
+                                            h('div', { className: 'irow' },
+                                                h('span', { className: 'ilabel' }, 'Usuário'),
+                                                h('span', { className: 'ival' }, d.usuario || '—', d.usuario && h('button', { className: 'icopy', onClick: () => copiar(d.usuario) }, '⎘'))
+                                            ),
+                                            h('div', { className: 'irow' },
+                                                h('span', { className: 'ilabel' }, 'Senha'),
+                                                h('span', { className: 'ival' },
+                                                    senhasVisiveis[d.id] ? (d.senha || '—') : '••••••••',
+                                                    h('button', { className: 'ieye', onClick: () => toggleSenha(d.id) }, senhasVisiveis[d.id] ? '🙈' : '👁'),
+                                                    d.senha && h('button', { className: 'icopy', onClick: () => copiar(d.senha) }, '⎘')
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                    )
+                ),
+
+                // Modal Condomínio
+                h('div', { className: 'overlay' + ((modal === 'novo-condo' || modal === 'edit-condo') ? ' open' : ''), onClick: e => { if (e.target.className.includes('overlay')) setModal(null) } },
+                    h('div', { className: 'modal' },
+                        h('div', { className: 'mtitle' }, modal === 'edit-condo' ? 'Editar Condomínio' : 'Novo Condomínio'),
+                        h('div', { className: 'fg' },
+                            h('label', null, 'Nome do Condomínio'),
+                            h('input', {
+                                type: 'text', placeholder: 'Ex: Residencial das Flores', value: formCondo.nome, onChange: e => setFormCondo(f => ({ ...f, nome: e.target.value })),
+                                onKeyDown: e => { if (e.key === 'Enter') salvarCondo() }
+                            })
+                        ),
+                        h('div', { className: 'mactions' },
+                            h('button', { className: 'bg2', onClick: () => setModal(null) }, 'Cancelar'),
+                            h('button', { className: 'bp', onClick: salvarCondo, disabled: salvando }, salvando ? 'Salvando...' : 'Salvar')
+                        )
+                    )
+                ),
+
+                // Modal Dispositivo
+                h('div', { className: 'overlay' + ((modal === 'novo-dev' || modal === 'edit-dev') ? ' open' : ''), onClick: e => { if (e.target.className.includes('overlay')) setModal(null) } },
+                    h('div', { className: 'modal' },
+                        h('div', { className: 'mtitle' }, modal === 'edit-dev' ? 'Editar Dispositivo' : 'Novo Dispositivo'),
+                        h('div', { className: 'frow' },
+                            h('div', { className: 'fg' }, h('label', null, 'Tipo'), h('select', { value: formDev.tipo, onChange: upDev('tipo') }, h('option', { value: 'DVR' }, 'DVR'), h('option', { value: 'Leitor Facial' }, 'Leitor Facial'))),
+                            h('div', { className: 'fg' }, h('label', null, 'Nome'), h('input', { type: 'text', placeholder: 'Ex: DVR Entrada', value: formDev.nome, onChange: upDev('nome') })),
+                            h('div', { className: 'fg full' }, h('label', null, 'Localização'), h('input', { type: 'text', placeholder: 'Ex: Portaria, Salão...', value: formDev.localizacao, onChange: upDev('localizacao') })),
+                            h('div', { className: 'fg' }, h('label', null, 'IP'), h('input', { type: 'text', placeholder: '192.168.1.100', value: formDev.ip, onChange: upDev('ip') })),
+                            h('div', { className: 'fg' }, h('label', null, 'Usuário'), h('input', { type: 'text', placeholder: 'admin', value: formDev.usuario, onChange: upDev('usuario') })),
+                            h('div', { className: 'fg full' }, h('label', null, 'Senha'), h('input', { type: 'text', value: formDev.senha, onChange: upDev('senha') }))
+                        ),
+                        h('div', { className: 'mactions' },
+                            h('button', { className: 'bg2', onClick: () => setModal(null) }, 'Cancelar'),
+                            h('button', { className: 'bp', onClick: salvarDev, disabled: salvando }, salvando ? 'Salvando...' : 'Salvar')
+                        )
+                    )
+                ),
+
+                toast && h('div', { className: 'toast', style: { color: toast.tipo === 'erro' ? 'var(--red)' : 'var(--green)' } }, toast.msg)
+            );
+        }
+
+        createRoot(document.getElementById('app')).render(h(App));
     </script>
 </body>
 
